@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USD/JPY Backtest Reports</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0f1117;
+  color: #e0e0e0;
+  padding: 24px;
+}
+h1 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.subtitle {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.card {
+  background: #1a1d27;
+  border: 1px solid #2a2d37;
+  border-radius: 10px;
+  padding: 20px;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.card:hover {
+  border-color: #4dabf7;
+  transform: translateY(-2px);
+}
+.card .tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.tag-win { background: #1a3a2a; color: #4ade80; }
+.tag-lose { background: #3a1a1a; color: #f87171; }
+.tag-even { background: #3a3a1a; color: #fbbf24; }
+.tag-best { background: #1a2a4a; color: #60a5fa; }
+.card h2 {
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+.card .period {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 12px;
+}
+.card .stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.card .stat {
+  text-align: center;
+}
+.card .stat-label {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+}
+.card .stat-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+.card .stat-value.positive { color: #4ade80; }
+.card .stat-value.negative { color: #f87171; }
+.card .detail {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+}
+.card .btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 16px;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.history {
+  margin-top: 32px;
+}
+.history h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #2a2d37;
+}
+th {
+  color: #888;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.win { color: #4ade80; }
+.lose { color: #f87171; }
+</style>
+</head>
+<body>
+
+<h1>USD/JPY Backtest Reports</h1>
+<p class="subtitle">バックテスト済み戦略の一覧 - レポートをクリックして詳細を確認</p>
+
+<div class="cards">
+
+  <!-- Multi-Strategy Portfolio (BEST) -->
+  <a href="report_multi_portfolio.html" class="card">
+    <span class="tag tag-best">BEST</span>
+    <span class="tag tag-win">月次勝率60.0%</span>
+    <h2>Multi Portfolio: TF + ST + MACD + Ichimoku</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+164.5%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">年次勝率</div>
+        <div class="stat-value positive">83.3%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-11.3%</div>
+      </div>
+    </div>
+    <div class="detail">
+      4戦略均等配分 (各25%)。月次勝率60.0%で単独戦略を上回る。<br>
+      24年中20年勝ち (負け年は2008/2011/2015/2019のみ)。<br>
+      MDDも-11.3%とTF単独-17.4%から大幅改善
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Multi Portfolio Leverage Analysis -->
+  <a href="report_multi_leverage.html" class="card">
+    <span class="tag tag-best">NEW</span>
+    <span class="tag tag-win">レバレッジ分析</span>
+    <h2>Multi Portfolio レバレッジ感応度</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | 1x ~ 25x</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">3x Return</div>
+        <div class="stat-value positive">+1206%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">3x 年利</div>
+        <div class="stat-value positive">+11.0%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">3x MDD</div>
+        <div class="stat-value">-30.0%</div>
+      </div>
+    </div>
+    <div class="detail">
+      4戦略ポートフォリオにレバレッジをかけた場合の検証。<br>
+      1x〜25xまで検証。<strong>3xが現実的に最適</strong>(100万→1,306万)。<br>
+      10xで年利ピーク20%だがMDD-75%。25xは破綻。
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Combined TF+VB Portfolio -->
+  <a href="report_combined.html" class="card">
+    <span class="tag tag-win">月次勝率56.9%</span>
+    <h2>Combined: TF + Volatility Breakout</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+188.7%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">年次勝率</div>
+        <div class="stat-value positive">79.2%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-15.2%</div>
+      </div>
+    </div>
+    <div class="detail">
+      Trend Follow (65%) + Volatility Breakout (35%) のポートフォリオ。<br>
+      月次勝率56.9% (TF単独55.6%から改善)。年次19/24年勝ち。<br>
+      最大連敗7ヶ月 (TF単独8ヶ月から改善)
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Trend Follow -->
+  <a href="report_trend_follow.html" class="card">
+    <span class="tag tag-win">25年全勝</span>
+    <h2>Trend Follow (Donchian Channel)</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+224.5%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">PF</div>
+        <div class="stat-value">1.12</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-17.4%</div>
+      </div>
+    </div>
+    <div class="detail">
+      Donchian Channel Breakout + ATRトレーリングストップ。<br>
+      勝率37.3%だが大きく勝つ設計。5/5期間すべて勝ち。<br>
+      EP=15 EX=15 ASL=3.0 ATR=3.0 MA=OFF HOLD=72h
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Ichimoku Cloud -->
+  <a href="report_ichimoku.html" class="card">
+    <span class="tag tag-win">PF最高1.17</span>
+    <h2>Ichimoku Cloud (単独)</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+125.5%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">PF</div>
+        <div class="stat-value">1.17</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-14.4%</div>
+      </div>
+    </div>
+    <div class="detail">
+      一目均衡表の雲ブレイクアウト。日本発指標でJPYペアに適合。<br>
+      PF最高(1.17)、MDD最小(-14.4%)、月次最大連敗4ヶ月。<br>
+      9/26/52 SL=2.0 Trail=3.0 TK=ON Hold=72h
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- MACD Momentum -->
+  <a href="report_macd.html" class="card">
+    <span class="tag tag-win">25年勝ち</span>
+    <h2>MACD Momentum (単独)</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+170.8%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">PF</div>
+        <div class="stat-value">1.14</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-14.7%</div>
+      </div>
+    </div>
+    <div class="detail">
+      MACDヒストグラムのゼロクロスで勢いを捕捉。<br>
+      単独戦略で2位のRecord(+170.8%)、月次勝率55.9%。<br>
+      fast=12 slow=26 signal=12 SL=2.5 Trail=2.5
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Supertrend -->
+  <a href="report_supertrend.html" class="card">
+    <span class="tag tag-win">25年勝ち</span>
+    <h2>Supertrend (単独)</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+137.2%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">PF</div>
+        <div class="stat-value">1.13</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-21.8%</div>
+      </div>
+    </div>
+    <div class="detail">
+      ATRベースのトレンドフォロー指標。価格がATR×2バンドを突破で転換判定。<br>
+      Return +137%だがMDDはやや大きめ(-21.8%)。<br>
+      period=10 multiplier=2.0 SL=2.0 Trail=3.0 Hold=72h
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Volatility Breakout -->
+  <a href="report_combined.html" class="card">
+    <span class="tag tag-win">25年勝ち</span>
+    <h2>Volatility Breakout (単独)</h2>
+    <p class="period">2000 ~ 2024 (24.6年間) | histdata.com H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+122.3%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">PF</div>
+        <div class="stat-value">1.08</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-14.9%</div>
+      </div>
+    </div>
+    <div class="detail">
+      短期モメンタムブレイクアウト (Larry Williams系)。<br>
+      24Hレンジの0.3倍突破でエントリー。月次最大連敗4ヶ月。<br>
+      k=0.3 SL=2.0 TP=3.0 Hold=24h ADX&gt;15
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+  <!-- Asian Breakout (2年) -->
+  <a href="report_asian_breakout.html" class="card">
+    <span class="tag tag-even">短期のみ有効</span>
+    <h2>Asian Range Breakout</h2>
+    <p class="period">2024 ~ 2026 (2年間) | yfinance H1</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Return</div>
+        <div class="stat-value positive">+14.6%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">PF</div>
+        <div class="stat-value">1.30</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">MDD</div>
+        <div class="stat-value">-2.4%</div>
+      </div>
+    </div>
+    <div class="detail">
+      アジア時間のレンジブレイクアウト。直近2年では好成績だが、<br>
+      25年検証で5年中2期間負け。長期安定性に課題あり。<br>
+      SL=30 TP=75 SE=14 MR=0.15
+    </div>
+    <span class="btn">レポートを見る</span>
+  </a>
+
+</div>
+
+<!-- 全戦略比較テーブル -->
+<div class="history">
+  <h2>Strategy History (全戦略の検証履歴)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>戦略</th>
+        <th>検証期間</th>
+        <th>トレード数</th>
+        <th>勝率</th>
+        <th>PF</th>
+        <th>MDD</th>
+        <th>Return</th>
+        <th>年利</th>
+        <th>判定</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#1e3a2e">
+        <td><strong>★ Multi Portfolio (TF+ST+MACD+ICHI)</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>約14,600</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-11.3%</td>
+        <td class="win">+164.5%</td>
+        <td class="win">+4.0%</td>
+        <td><span class="win">勝ち</span></td>
+        <td><strong>月次勝率60.0%★最高。年次83.3%(20/24年)</strong></td>
+      </tr>
+      <tr style="background:#1e2a1e">
+        <td><strong>Combined TF65% + VB35%</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>12,188</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-15.2%</td>
+        <td class="win">+188.7%</td>
+        <td class="win">+4.4%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>月次勝率56.9%。年次19/24年勝ち</td>
+      </tr>
+      <tr>
+        <td><strong>Trend Follow Donchian (最適化)</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>6,006</td>
+        <td>37.3%</td>
+        <td>1.12</td>
+        <td>-17.4%</td>
+        <td class="win">+224.5%</td>
+        <td class="win">+4.9%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>5/5期間勝ち。最も安定</td>
+      </tr>
+      <tr>
+        <td><strong>MACD Momentum (最適化)</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>6,083</td>
+        <td>35.5%</td>
+        <td>1.14</td>
+        <td>-14.7%</td>
+        <td class="win">+170.8%</td>
+        <td class="win">+4.1%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>MACDヒストゼロクロス。月次勝率55.9%</td>
+      </tr>
+      <tr>
+        <td><strong>Supertrend (最適化)</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>4,508</td>
+        <td>35.2%</td>
+        <td>1.13</td>
+        <td>-21.8%</td>
+        <td class="win">+137.2%</td>
+        <td class="win">+3.6%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>ATRバンド突破。MDDやや大きめ</td>
+      </tr>
+      <tr>
+        <td><strong>Ichimoku Cloud (最適化)</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>3,037</td>
+        <td>32.0%</td>
+        <td>1.17</td>
+        <td>-14.4%</td>
+        <td class="win">+125.5%</td>
+        <td class="win">+3.4%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>PF最高(1.17)、MDD最小。日本発指標</td>
+      </tr>
+      <tr>
+        <td><strong>Volatility Breakout (最適化)</strong></td>
+        <td>2000-2024 (25年)</td>
+        <td>6,182</td>
+        <td>45.4%</td>
+        <td>1.08</td>
+        <td>-14.9%</td>
+        <td class="win">+122.3%</td>
+        <td class="win">+3.3%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>短期モメンタム。月次最大連敗4ヶ月</td>
+      </tr>
+      <tr>
+        <td>Trend Follow Donchian (デフォルト)</td>
+        <td>2000-2024 (25年)</td>
+        <td>4,782</td>
+        <td>37.7%</td>
+        <td>1.11</td>
+        <td>-16.5%</td>
+        <td class="win">+113.4%</td>
+        <td class="win">+3.2%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>最適化前でも全期間勝ち</td>
+      </tr>
+      <tr>
+        <td>RSI Mean Reversion</td>
+        <td>2000-2024 (25年)</td>
+        <td>2,311</td>
+        <td>50.6%</td>
+        <td>0.80</td>
+        <td>-57.3%</td>
+        <td class="lose">-55.6%</td>
+        <td>-</td>
+        <td><span class="lose">負け</span></td>
+        <td>FX H1で逆張りは長期機能せず</td>
+      </tr>
+      <tr>
+        <td>Asian Breakout (2年最適化)</td>
+        <td>2024-2026 (2年)</td>
+        <td>416</td>
+        <td>43.0%</td>
+        <td>1.30</td>
+        <td>-2.4%</td>
+        <td class="win">+14.6%</td>
+        <td class="win">+7.1%</td>
+        <td><span class="win">勝ち</span></td>
+        <td>直近2年のみ。25年では通用せず</td>
+      </tr>
+      <tr>
+        <td>Asian Breakout (25年最適化)</td>
+        <td>2000-2024 (25年)</td>
+        <td>5,431</td>
+        <td>48.5%</td>
+        <td>1.02</td>
+        <td>-20.6%</td>
+        <td class="win">+12.8%</td>
+        <td>+0.5%</td>
+        <td><span style="color:#fbbf24">微妙</span></td>
+        <td>PF1.02で実質トントン</td>
+      </tr>
+      <tr>
+        <td>Mean Reversion (BB+RSI)</td>
+        <td>2024-2026 (2年)</td>
+        <td>少</td>
+        <td>12%</td>
+        <td>&lt;1.0</td>
+        <td>-</td>
+        <td class="lose">-</td>
+        <td>-</td>
+        <td><span class="lose">負け</span></td>
+        <td>USD/JPY H1では機能せず</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

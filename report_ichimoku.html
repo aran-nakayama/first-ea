@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Ichimoku Cloud Strategy - Backtest Report</title>
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f5f5f5;
+    line-height: 1.6;
+}
+h1 {
+    font-size: 22px;
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #333;
+}
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.card-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+td { padding: 4px; border-bottom: 1px solid #eee; }
+td:first-child { color: #666; }
+td:last-child { text-align: right; font-weight: 600; }
+.big { font-size: 32px; font-weight: 800; color: #16a34a; }
+.back { display: inline-block; margin-bottom: 16px; color: #4263eb; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← 戦略一覧に戻る</a>
+
+<h1>Ichimoku Cloud Strategy - Backtest Report</h1>
+
+<div class="card">
+  <div class="card-title">戦略概要</div>
+  <p>一目均衡表の雲ブレイクアウト戦略。日本発の伝統的指標で、JPYペアに適している。価格が雲を突破 + 転換線/基準線の関係でエントリー判定。</p>
+  <div style="background:#f8f9fa;border-radius:4px;padding:10px;margin-top:10px;font-family:monospace;font-size:12px">
+    最適パラメータ: tenkan=9, kijun=26, senkou_b=52, ATR_SL=2.0, ATR_Trail=3.0, TK_Cross=ON, Hold=72h
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-title">結果ハイライト</div>
+    <div style="text-align:center;margin:12px 0">
+      <div class="big">+125.5%</div>
+      <div style="color:#666">最終資産 2,255,011 円 (年利 +3.4%)</div>
+    </div>
+    <table>
+      <tr><td>期間</td><td>2000/05/30 ~ 2024/12/31</td></tr>
+      <tr><td>初期資金</td><td>1,000,000 円</td></tr>
+      <tr><td>スプレッド</td><td>0.4 pips</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">詳細統計</div>
+    <table>
+      <tr><td>トレード数</td><td>3037</td></tr>
+      <tr><td>勝率 (トレード)</td><td>32.0%</td></tr>
+      <tr><td>PF</td><td>1.17</td></tr>
+      <tr><td>Sharpe Ratio</td><td>0.49</td></tr>
+      <tr><td>最大DD</td><td>-14.4%</td></tr>
+      <tr><td style="color:#4263eb"><strong>月次勝率</strong></td><td style="color:#4263eb"><strong>55.9%</strong></td></tr>
+      <tr><td>月次最大連敗</td><td>4ヶ月</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">判定</div>
+  <p>
+    ✅ 長期運用可能
+    (PF=1.17, Return=+125.5%)
+  </p>
+</div>
+
+</body>
+</html>
