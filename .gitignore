@@ -7,3 +7,6 @@ dist/
 data/cache/
 data/histdata_raw/
 .DS_Store
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/projects/
