@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategy Ranking - 全戦略統一比較</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0f1117;
+  color: #e0e0e0;
+  padding: 24px;
+}
+h1 { font-size: 22px; margin-bottom: 4px; }
+.subtitle { color: #888; font-size: 13px; margin-bottom: 16px; }
+.back { display: inline-block; margin-bottom: 12px; color: #4dabf7; text-decoration: none; font-size: 13px; }
+.back:hover { text-decoration: underline; }
+.legend { color: #888; font-size: 12px; margin-bottom: 12px; line-height: 1.7; }
+.legend code { background: #1a1d27; padding: 2px 6px; border-radius: 3px; color: #e0e0e0; }
+
+.controls { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.controls label { font-size: 12px; color: #888; }
+.controls select {
+  background: #1a1d27; color: #e0e0e0; border: 1px solid #2a2d37;
+  padding: 6px 10px; border-radius: 4px; font-size: 13px; cursor: pointer;
+}
+.controls .reset {
+  background: #1a1d27; color: #4dabf7; border: 1px solid #2a2d37;
+  padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;
+}
+.controls .reset:hover { background: #243043; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; background: #1a1d27; border-radius: 8px; overflow: hidden; }
+thead { background: #20232f; }
+th {
+  padding: 10px 8px; text-align: center; font-weight: 600; font-size: 11px;
+  text-transform: uppercase; color: #aaa; cursor: pointer; user-select: none;
+  border-bottom: 2px solid #2a2d37; white-space: nowrap; position: sticky; top: 0;
+}
+th:hover { background: #2a2d37; color: #4dabf7; }
+th.sorted-asc::after { content: " ▲"; color: #4dabf7; }
+th.sorted-desc::after { content: " ▼"; color: #4dabf7; }
+td {
+  padding: 10px 8px; border-bottom: 1px solid #2a2d37; text-align: right;
+  white-space: nowrap;
+}
+td.name { text-align: left; font-weight: 600; }
+td.name a { color: #e0e0e0; text-decoration: none; }
+td.name a:hover { color: #4dabf7; text-decoration: underline; }
+td.center { text-align: center; }
+tbody tr:hover { background: #20232f; }
+tbody tr.rank-best { background: rgba(34, 197, 94, 0.15); }
+tbody tr.rank-best:hover { background: rgba(34, 197, 94, 0.25); }
+
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 700;
+}
+.tag-best { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+.tag-win { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.tag-even { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.tag-lose { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+
+.positive { color: #4ade80; }
+.negative { color: #f87171; }
+.dim { color: #666; }
+.type-badge {
+  display: inline-block; padding: 1px 6px; border-radius: 3px;
+  font-size: 10px; margin-left: 6px; vertical-align: middle;
+}
+.type-portfolio { background: #1a2a4a; color: #60a5fa; }
+.type-single { background: #2a2a2a; color: #888; }
+
+.help-card {
+  background: #1a1d27; border: 1px solid #2a2d37; border-radius: 8px;
+  padding: 16px; margin-top: 20px; font-size: 12px; line-height: 1.7; color: #aaa;
+}
+.help-card strong { color: #e0e0e0; }
+.help-card ul { margin: 6px 0 6px 20px; }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← 戦略一覧に戻る</a>
+
+<h1>Strategy Ranking - 全戦略統一比較</h1>
+<p class="subtitle">USD/JPY H1 / 2000-2024 (24.6年) / 初期資金100万円 / スプレッド0.4pips込み<br>
+列ヘッダーをクリックでソート、もう一度クリックで降順。複数戦略を同条件で比較できます。</p>
+
+<div class="controls">
+  <label>並び替え:</label>
+  <select id="sortPreset">
+    <option value="monthly_wr-desc">月次勝率が高い順 (毎月勝ちたい)</option>
+    <option value="return_pct-desc">Return が大きい順 (利益最大化)</option>
+    <option value="annual_pct-desc">年利が高い順</option>
+    <option value="mdd-desc">MDDが小さい順 (リスク最小)</option>
+    <option value="trade_pf-desc">トレードPF が高い順</option>
+    <option value="monthly_pf-desc">月次PF が高い順</option>
+    <option value="sharpe-desc">Sharpe が高い順</option>
+    <option value="trade_wr-desc">勝率(トレード)が高い順</option>
+    <option value="yearly_wr-desc">年次勝率が高い順</option>
+  </select>
+  <button class="reset" onclick="filterType('all')">全て</button>
+  <button class="reset" onclick="filterType('portfolio')">ポートフォリオのみ</button>
+  <button class="reset" onclick="filterType('single')">単一戦略のみ</button>
+</div>
+
+<table id="rankingTable">
+  <thead>
+    <tr>
+      <th data-key="name" class="name-col">戦略</th>
+      <th data-key="trades">トレード</th>
+      <th data-key="trade_wr">勝率</th>
+      <th data-key="trade_pf">PF</th>
+      <th data-key="monthly_pf">月次PF</th>
+      <th data-key="sharpe">Sharpe</th>
+      <th data-key="mdd">MDD</th>
+      <th data-key="return_pct">Return</th>
+      <th data-key="annual_pct">年利</th>
+      <th data-key="monthly_wr">月次勝率</th>
+      <th data-key="yearly_wr">年次勝率</th>
+      <th data-key="rank">判定</th>
+    </tr>
+  </thead>
+  <tbody id="rankingBody"></tbody>
+</table>
+
+<div class="help-card">
+  <strong>指標の見方:</strong>
+  <ul>
+    <li><strong>勝率</strong> - トレード単位の勝率。トレンドフォロー系は30-40%でも長期で勝てる(損小利大)</li>
+    <li><strong>PF</strong> - Profit Factor (総利益÷総損失)。1.0で損益分岐、1.1以上が許容、1.3以上で優秀</li>
+    <li><strong>月次PF</strong> - 月単位の総勝ち額÷総負け額。ポートフォリオ間で比較しやすい統一指標</li>
+    <li><strong>Sharpe</strong> - リスク調整後リターン。1.0以上で良好、0.5でも実用</li>
+    <li><strong>MDD</strong> - 最大ドローダウン (資産ピークからの最大下落率)。-15%以下を推奨</li>
+    <li><strong>月次勝率</strong> - 月次P&Lがプラスだった月の割合。<strong>毎月プラスを目指すならこれが最重要</strong></li>
+    <li><strong>年次勝率</strong> - 年次P&Lがプラスだった年の割合</li>
+  </ul>
+  <p style="margin-top:8px"><strong>判定ルール:</strong>
+    <span class="tag tag-best">★最優秀</span> 月次勝率58%以上 + MDD&gt;-15% + Return&gt;100%
+    &nbsp; <span class="tag tag-win">優良</span> 月次勝率55%以上 + Return&gt;100%
+    &nbsp; <span class="tag tag-win">勝ち</span> Return&gt;50% + MDD&gt;-30%
+    &nbsp; <span class="tag tag-even">微妙</span> 利益あり、リスク注意
+    &nbsp; <span class="tag tag-lose">負け</span> 損失 or 致命的MDD
+  </p>
+</div>
+
+<script>
+const DATA = [{"name": "Multi (TF+ST+MACD+ICHI)", "type": "portfolio", "report": "report_multi_portfolio.html", "params": "4戦略均等配分 (各25%)", "trades": 19634, "trade_wr": 35.4, "trade_pf": 1.13, "monthly_pf": 1.98, "sharpe": 0.63, "mdd": -11.3, "return_pct": 164.4, "annual_pct": 4.0, "monthly_wr": 60.0, "yearly_wr": 83.3, "rank": "★最優秀", "rank_class": "best"}, {"name": "Combined (TF + VB)", "type": "portfolio", "report": "report_combined.html", "params": "TF 65% + VB 35%", "trades": 12188, "trade_wr": 41.4, "trade_pf": 1.11, "monthly_pf": 1.75, "sharpe": 0.56, "mdd": -15.2, "return_pct": 188.7, "annual_pct": 4.4, "monthly_wr": 56.9, "yearly_wr": 79.2, "rank": "優良", "rank_class": "win"}, {"name": "Trend Follow (Donchian)", "type": "single", "report": "report_trend_follow.html", "params": "entry_period=15, exit_period=15, atr_sl_mult=3.0", "trades": 6006, "trade_wr": 37.3, "trade_pf": 1.12, "monthly_pf": 1.71, "sharpe": 0.54, "mdd": -17.1, "return_pct": 224.5, "annual_pct": 4.9, "monthly_wr": 55.6, "yearly_wr": 70.8, "rank": "優良", "rank_class": "win"}, {"name": "Supertrend", "type": "single", "report": "report_supertrend.html", "params": "st_period=10, st_multiplier=2.0, atr_sl_mult=2.0", "trades": 4508, "trade_wr": 35.2, "trade_pf": 1.13, "monthly_pf": 1.58, "sharpe": 0.45, "mdd": -19.6, "return_pct": 137.2, "annual_pct": 3.6, "monthly_wr": 54.6, "yearly_wr": 66.7, "rank": "勝ち", "rank_class": "win"}, {"name": "MACD Momentum", "type": "single", "report": "report_macd.html", "params": "atr_sl_mult=2.5, atr_trail_mult=2.5, use_ma_filter=0", "trades": 6083, "trade_wr": 35.5, "trade_pf": 1.14, "monthly_pf": 1.74, "sharpe": 0.57, "mdd": -12.6, "return_pct": 170.8, "annual_pct": 4.1, "monthly_wr": 55.9, "yearly_wr": 75.0, "rank": "優良", "rank_class": "win"}, {"name": "Ichimoku Cloud", "type": "single", "report": "report_ichimoku.html", "params": "atr_sl_mult=2.0, atr_trail_mult=3.0, use_tenkan_kijun=1", "trades": 3037, "trade_wr": 32.0, "trade_pf": 1.17, "monthly_pf": 1.64, "sharpe": 0.52, "mdd": -14.2, "return_pct": 125.5, "annual_pct": 3.4, "monthly_wr": 55.9, "yearly_wr": 83.3, "rank": "優良", "rank_class": "win"}, {"name": "Volatility Breakout", "type": "single", "report": "report_combined.html", "params": "k_factor=0.3, atr_sl_mult=2.0, atr_tp_mult=3.0", "trades": 6182, "trade_wr": 45.4, "trade_pf": 1.08, "monthly_pf": 1.48, "sharpe": 0.47, "mdd": -14.3, "return_pct": 122.3, "annual_pct": 3.3, "monthly_wr": 56.3, "yearly_wr": 54.2, "rank": "優良", "rank_class": "win"}, {"name": "Asian Breakout (25年最適化)", "type": "single", "report": "report_asian_breakout.html", "params": "sl_pips=80, tp_pips=120, session_start=8", "trades": 5362, "trade_wr": 48.3, "trade_pf": 1.0, "monthly_pf": 0.99, "sharpe": 0.01, "mdd": -20.0, "return_pct": -2.0, "annual_pct": -0.1, "monthly_wr": 50.2, "yearly_wr": 33.3, "rank": "負け", "rank_class": "lose"}, {"name": "RSI Mean Reversion", "type": "single", "report": "", "params": "rsi_oversold=25, rsi_overbought=75, atr_sl_mult=2.0", "trades": 2311, "trade_wr": 50.6, "trade_pf": 0.8, "monthly_pf": 0.48, "sharpe": -0.86, "mdd": -57.1, "return_pct": -55.6, "annual_pct": -3.2, "monthly_wr": 41.0, "yearly_wr": 20.8, "rank": "負け", "rank_class": "lose"}];
+
+let currentSort = { key: 'monthly_wr', dir: 'desc' };
+let currentFilter = 'all';
+
+function fmt(v, key) {
+  if (v === 999) return '∞';
+  if (v === null || v === undefined) return '-';
+  if (key === 'trades') return v.toLocaleString();
+  if (key === 'trade_wr' || key === 'monthly_wr' || key === 'yearly_wr') return v.toFixed(1) + '%';
+  if (key === 'mdd') return v.toFixed(1) + '%';
+  if (key === 'return_pct' || key === 'annual_pct') return (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+  if (key === 'trade_pf' || key === 'monthly_pf' || key === 'sharpe') return v.toFixed(2);
+  return v;
+}
+
+function colorClass(v, key) {
+  if (key === 'return_pct' || key === 'annual_pct' || key === 'sharpe') {
+    return v > 0 ? 'positive' : v < 0 ? 'negative' : '';
+  }
+  if (key === 'monthly_pf' || key === 'trade_pf') {
+    return v >= 1.1 ? 'positive' : v < 1.0 ? 'negative' : '';
+  }
+  if (key === 'mdd') {
+    return v > -15 ? 'positive' : v < -30 ? 'negative' : '';
+  }
+  if (key === 'monthly_wr') {
+    return v >= 55 ? 'positive' : v < 50 ? 'negative' : '';
+  }
+  if (key === 'yearly_wr') {
+    return v >= 75 ? 'positive' : v < 60 ? 'negative' : '';
+  }
+  if (key === 'trade_wr') {
+    return v >= 50 ? 'positive' : '';
+  }
+  return '';
+}
+
+function render() {
+  const tbody = document.getElementById('rankingBody');
+  let rows = DATA.slice();
+  if (currentFilter !== 'all') {
+    rows = rows.filter(r => r.type === currentFilter);
+  }
+  rows.sort((a, b) => {
+    let av = a[currentSort.key];
+    let bv = b[currentSort.key];
+    if (currentSort.key === 'name' || currentSort.key === 'rank') {
+      av = String(av); bv = String(bv);
+      return currentSort.dir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    }
+    return currentSort.dir === 'asc' ? av - bv : bv - av;
+  });
+
+  tbody.innerHTML = rows.map((r, idx) => {
+    const trClass = r.rank_class === 'best' ? 'rank-best' : '';
+    const reportLink = r.report
+      ? `<a href="${r.report}">${r.name}</a>`
+      : r.name;
+    const typeBadge = r.type === 'portfolio'
+      ? '<span class="type-badge type-portfolio">PORTFOLIO</span>'
+      : '<span class="type-badge type-single">SINGLE</span>';
+    return `<tr class="${trClass}">
+      <td class="name">${reportLink}${typeBadge}<br><span class="dim" style="font-size:11px">${r.params}</span></td>
+      <td>${fmt(r.trades, 'trades')}</td>
+      <td class="${colorClass(r.trade_wr, 'trade_wr')}">${fmt(r.trade_wr, 'trade_wr')}</td>
+      <td class="${colorClass(r.trade_pf, 'trade_pf')}">${fmt(r.trade_pf, 'trade_pf')}</td>
+      <td class="${colorClass(r.monthly_pf, 'monthly_pf')}">${fmt(r.monthly_pf, 'monthly_pf')}</td>
+      <td class="${colorClass(r.sharpe, 'sharpe')}">${fmt(r.sharpe, 'sharpe')}</td>
+      <td class="${colorClass(r.mdd, 'mdd')}">${fmt(r.mdd, 'mdd')}</td>
+      <td class="${colorClass(r.return_pct, 'return_pct')}">${fmt(r.return_pct, 'return_pct')}</td>
+      <td class="${colorClass(r.annual_pct, 'annual_pct')}">${fmt(r.annual_pct, 'annual_pct')}</td>
+      <td class="${colorClass(r.monthly_wr, 'monthly_wr')}">${fmt(r.monthly_wr, 'monthly_wr')}</td>
+      <td class="${colorClass(r.yearly_wr, 'yearly_wr')}">${fmt(r.yearly_wr, 'yearly_wr')}</td>
+      <td class="center"><span class="tag tag-${r.rank_class}">${r.rank}</span></td>
+    </tr>`;
+  }).join('');
+
+  // ヘッダーのソートアイコン更新
+  document.querySelectorAll('th').forEach(th => {
+    th.classList.remove('sorted-asc', 'sorted-desc');
+    if (th.dataset.key === currentSort.key) {
+      th.classList.add(currentSort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+    }
+  });
+}
+
+// ヘッダークリックでソート
+document.querySelectorAll('th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (currentSort.key === key) {
+      currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+      currentSort.key = key;
+      // 数値系列はデフォルト降順
+      currentSort.dir = (key === 'mdd') ? 'desc' : 'desc';
+    }
+    document.getElementById('sortPreset').value = `${key}-${currentSort.dir}`;
+    render();
+  });
+});
+
+// プリセット選択
+document.getElementById('sortPreset').addEventListener('change', (e) => {
+  const [key, dir] = e.target.value.split('-');
+  currentSort = { key, dir };
+  render();
+});
+
+function filterType(t) {
+  currentFilter = t;
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

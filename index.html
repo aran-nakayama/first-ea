@@ -124,12 +124,58 @@ th {
 }
 .win { color: #4ade80; }
 .lose { color: #f87171; }
+
+.ranking-banner {
+  display: block;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2a4a7a 100%);
+  border: 1px solid #3a5a8a;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.ranking-banner:hover {
+  border-color: #60a5fa;
+  transform: translateY(-2px);
+}
+.ranking-banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.ranking-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.ranking-sub {
+  font-size: 13px;
+  color: #b8d0e8;
+}
+.ranking-arrow {
+  font-size: 28px;
+  color: #60a5fa;
+}
 </style>
 </head>
 <body>
 
 <h1>USD/JPY Backtest Reports</h1>
 <p class="subtitle">バックテスト済み戦略の一覧 - レポートをクリックして詳細を確認</p>
+
+<a href="report_ranking.html" class="ranking-banner">
+  <div class="ranking-banner-inner">
+    <div>
+      <div class="ranking-title">📊 Strategy Ranking - 全戦略統一比較</div>
+      <div class="ranking-sub">同一データ・同一指標で 9戦略 を比較。勝率・PF・MDD・月次勝率など全指標でソート可能</div>
+    </div>
+    <div class="ranking-arrow">→</div>
+  </div>
+</a>
 
 <div class="cards">
 
@@ -383,6 +429,11 @@ th {
 <!-- 全戦略比較テーブル -->
 <div class="history">
   <h2>Strategy History (全戦略の検証履歴)</h2>
+  <p style="color:#888;font-size:13px;margin-bottom:12px">
+    ⚡ 全戦略を統一指標で並び替え可能な
+    <a href="report_ranking.html" style="color:#4dabf7">ランキングページ</a>
+    も用意しています(推奨)。下記は記録用の固定テーブルです。
+  </p>
   <table>
     <thead>
       <tr>
